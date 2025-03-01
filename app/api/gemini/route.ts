@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
       - How severe is this in the real world?
       
       Format your response using markdown with proper headings, bullet points, and code blocks where appropriate.
+      Do not include any attribution or footnotes about the analysis being powered by any AI service.
     `;
 
     // Second segment prompt - Prevention and references
@@ -78,6 +79,7 @@ export async function POST(req: NextRequest) {
       - Articles or documentation for further reading
       
       Format your response using markdown with proper headings, bullet points, and code blocks where appropriate.
+      Do not include any attribution or footnotes about the analysis being powered by any AI service.
     `;
 
     // Make first API call
@@ -150,17 +152,14 @@ export async function POST(req: NextRequest) {
     const data2 = await response2.json();
     const analysisText2 = data2.candidates?.[0]?.content?.parts?.[0]?.text || '';
 
-    // Combine both responses
+    // Combine both responses - removed the attribution footer
     const combinedAnalysis = `
 # Security Vulnerability Analysis
 
 ${analysisText1}
 
 ${analysisText2}
-
----
-*Analysis powered by Google Gemini*
-    `;
+    `.trim();
     
     return NextResponse.json({ 
       analysis: combinedAnalysis,
