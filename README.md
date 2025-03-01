@@ -1,124 +1,113 @@
-# SecureSync - Modern File Synchronization Platform
+# SecureSync Dashboard
 
-## Project Structure
+A modern, responsive security monitoring dashboard built with Next.js and TypeScript. SecureSync provides real-time security insights, threat monitoring, and comprehensive security analytics for your digital infrastructure.
+
+![SecureSync Dashboard](public/dashboard-preview.png)
+
+## 🚀 Features
+
+- **Real-time Security Monitoring**
+  - Live security score tracking
+  - Active threat detection and alerts
+  - Security trend analysis and visualization
+
+- **Modern UI Components**
+  - Responsive design using Tailwind CSS
+  - Interactive charts and graphs with Recharts
+  - Smooth animations with Framer Motion
+  - Accessible UI components with Radix UI
+
+- **Advanced Analytics**
+  - Security score trends
+  - Threat detection metrics
+  - User activity monitoring
+  - Resource usage statistics
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 14
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: 
+  - Radix UI
+  - Shadcn UI
+  - Lucide Icons
+- **Charts**: Recharts
+- **Animation**: Framer Motion
+- **Form Handling**: React Hook Form
+- **Validation**: Zod
+- **State Management**: React Hooks
+
+## 📦 Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/securesync-dashboard.git
+   cd securesync-dashboard
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file in the root directory and add necessary environment variables:
+   ```env
+   NEXT_PUBLIC_API_URL=your_api_url
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 🚀 Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build production bundle
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+
+## 📁 Project Structure
+
 ```
-├── apps/                   # Application modules
-│   ├── landing/           # Marketing website
-│   │   ├── components/    # Landing page components
-│   │   ├── pages/        # Marketing pages
-│   │   └── styles/       # Landing-specific styles
-│   │
-│   ├── dashboard/         # Main application dashboard
-│   │   ├── components/   # Dashboard components
-│   │   ├── features/     # Feature modules
-│   │   ├── layouts/     # Dashboard layouts
-│   │   └── styles/      # Dashboard-specific styles
-│   │
-│   └── devops/           # DevOps and monitoring
-│       ├── components/   # DevOps dashboard components
-│       ├── monitoring/   # Monitoring interfaces
-│       └── pipelines/   # CI/CD pipeline configurations
-│
-├── packages/              # Shared packages
-│   ├── ui/               # Shared UI components
-│   │   ├── components/  # Base components
-│   │   └── styles/     # Base styles and themes
-│   │
-│   ├── config/          # Shared configuration
-│   │   ├── eslint/    # ESLint configuration
-│   │   └── typescript/ # TypeScript configuration
-│   │
-│   └── utils/           # Shared utilities
-│       ├── hooks/      # React hooks
-│       └── helpers/    # Helper functions
-│
-├── infrastructure/       # Infrastructure as code
-│   ├── terraform/      # Terraform configurations
-│   ├── kubernetes/     # Kubernetes manifests
-│   └── docker/        # Docker configurations
-│
-└── tools/              # Development tools
-    ├── scripts/       # Build and deployment scripts
-    └── generators/   # Code generators
+securesync-dashboard/
+├── app/                # Next.js app directory
+├── components/         # Reusable UI components
+├── lib/               # Utility functions and helpers
+├── public/            # Static assets
+├── styles/           # Global styles
+├── types/            # TypeScript type definitions
+└── hooks/            # Custom React hooks
 ```
 
-## Applications
+## 🔒 Security Features
 
-### Landing Page (apps/landing)
-- Modern marketing website
-- Product information and pricing
-- Blog and documentation
-- Contact and support
+- Real-time security score monitoring
+- Threat detection and alerts
+- User activity tracking
+- Resource usage monitoring
+- Security trend analysis
+- Comprehensive reporting
 
-### Dashboard (apps/dashboard)
-- Secure file management
-- Team collaboration
-- Analytics and reporting
-- User management
+## 🤝 Contributing
 
-### DevOps Platform (apps/devops)
-- Deployment pipelines
-- Monitoring and alerts
-- Infrastructure management
-- Performance metrics
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Technology Stack
+## 📄 License
 
-### Frontend
-- Next.js 14 with App Router
-- TailwindCSS for styling
-- Framer Motion for animations
-- TypeScript for type safety
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-### Backend
-- Node.js with Express
-- PostgreSQL for data storage
-- Redis for caching
-- WebSocket for real-time features
+## 📧 Contact
 
-### DevOps
-- Docker for containerization
-- Kubernetes for orchestration
-- Terraform for infrastructure
-- GitHub Actions for CI/CD
+For questions or support, please open an issue in the GitHub repository or contact the maintainers.
 
-## Getting Started
+---
 
-1. Install dependencies:
-\`\`\`bash
-pnpm install
-\`\`\`
-
-2. Run development servers:
-\`\`\`bash
-# Run landing page
-pnpm dev:landing
-
-# Run dashboard
-pnpm dev:dashboard
-
-# Run devops platform
-pnpm dev:devops
-\`\`\`
-
-3. Build applications:
-\`\`\`bash
-pnpm build
-\`\`\`
-
-## Development Workflow
-
-1. Feature Development
-   - Create feature branch
-   - Develop and test locally
-   - Submit PR for review
-
-2. Testing
-   - Unit tests with Jest
-   - E2E tests with Cypress
-   - Performance testing
-
-3. Deployment
-   - Automated CI/CD pipeline
-   - Staging environment
-   - Production deployment 
+Built with ❤️ using Next.js and TypeScript 
