@@ -108,36 +108,58 @@ export default function VulnerabilitiesPage() {
   const [vulnerabilityData, setVulnerabilityData] = useState<SonarQubeResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
 
-  const fetchVulnerabilities = async () => {
+  const fetchVulnerabilities = async (retry = false) => {
     try {
       setIsLoading(true);
       setError(null);
       
-      const response = await fetch(
-        `${SONARQUBE_CONFIG.API_URL}/api/hotspots/search?projectKey=${SONARQUBE_CONFIG.PROJECT_KEY}`,
-        {
-          headers: getSonarQubeHeaders(),
+      const response = await fetch('/api/sonarqube', {
+        // Add cache control headers
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
         }
-      );
-
+      });
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch security hotspots');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch security hotspots');
       }
 
       const data = await response.json();
       setVulnerabilityData(data);
+      setRetryCount(0); // Reset retry count on success
     } catch (error) {
       console.error('Error fetching vulnerabilities:', error);
-      setError('Failed to load security hotspots. Please check your connection and try again.');
+      
+      // Implement retry logic
+      if (retry && retryCount < 3) {
+        setRetryCount(prev => prev + 1);
+        setTimeout(() => fetchVulnerabilities(true), 1000 * (retryCount + 1)); // Exponential backoff
+        return;
+      }
+
+      setError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to load security hotspots. Please try again later.'
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchVulnerabilities();
+    fetchVulnerabilities(true); // Enable retry on initial load
   }, []);
+
+  const handleRetry = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setRetryCount(0);
+    void fetchVulnerabilities(true);
+  };
 
   const getComponentName = (componentKey: string) => {
     return vulnerabilityData?.components.find(c => c.key === componentKey)?.path || componentKey;
@@ -171,9 +193,25 @@ export default function VulnerabilitiesPage() {
         <XCircle className="h-12 w-12 text-destructive" />
         <h2 className="text-lg font-semibold text-destructive">Error Loading Data</h2>
         <p className="text-muted-foreground text-center">{error}</p>
-        <Button onClick={() => window.location.reload()} variant="outline">
-          Try Again
-        </Button>
+        <div className="flex gap-4">
+          <Button 
+            onClick={() => {
+              setRetryCount(0);
+              void fetchVulnerabilities(true);
+            }} 
+            variant="default"
+          >
+            Try Again
+          </Button>
+          <Button onClick={() => window.location.reload()} variant="outline">
+            Reload Page
+          </Button>
+        </div>
+        {retryCount > 0 && (
+          <p className="text-sm text-muted-foreground">
+            Retrying... Attempt {retryCount} of 3
+          </p>
+        )}
       </div>
     );
   }
