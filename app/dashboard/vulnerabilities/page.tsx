@@ -28,6 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { VulnerabilityDialog } from '@/components/vulnerability-dialog';
 import { formatDate } from '@/lib/utils';
 
 // Direct API call implementation
@@ -109,6 +110,8 @@ export default function VulnerabilitiesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [selectedVulnerability, setSelectedVulnerability] = useState<Vulnerability | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const fetchVulnerabilities = async (retry = false) => {
     try {
@@ -163,6 +166,11 @@ export default function VulnerabilitiesPage() {
 
   const getComponentName = (componentKey: string) => {
     return vulnerabilityData?.components.find(c => c.key === componentKey)?.path || componentKey;
+  };
+
+  const handleViewDetails = (vulnerability: Vulnerability) => {
+    setSelectedVulnerability(vulnerability);
+    setDialogOpen(true);
   };
 
   const filteredVulnerabilities = vulnerabilityData?.hotspots.filter((vuln) => {
@@ -353,7 +361,11 @@ export default function VulnerabilitiesPage() {
                   <TableCell>{vuln.securityCategory}</TableCell>
                   <TableCell className="text-sm">{vuln.author}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleViewDetails(vuln)}
+                    >
                       View Details
                     </Button>
                   </TableCell>
@@ -363,6 +375,13 @@ export default function VulnerabilitiesPage() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Vulnerability Details Dialog */}
+      <VulnerabilityDialog 
+        vulnerability={selectedVulnerability} 
+        open={dialogOpen} 
+        onOpenChange={setDialogOpen} 
+      />
     </div>
   );
-} 
+}
