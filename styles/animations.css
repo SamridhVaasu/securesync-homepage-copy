@@ -1,0 +1,157 @@
+/* Fade Animations */
+.fade-in {
+  animation: fadeIn var(--transition-normal) var(--ease-out);
+}
+
+.fade-out {
+  animation: fadeOut var(--transition-normal) var(--ease-in);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide Animations */
+.slide-up {
+  animation: slideUp var(--transition-normal) var(--ease-out);
+}
+
+.slide-down {
+  animation: slideDown var(--transition-normal) var(--ease-out);
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Scale Animations */
+.scale-in {
+  animation: scaleIn var(--transition-normal) var(--ease-out);
+}
+
+.scale-out {
+  animation: scaleOut var(--transition-normal) var(--ease-in);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Pulse Animation */
+.pulse {
+  animation: pulse 2s var(--ease-in-out) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Spin Animations */
+.spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+.spin-slow-reverse {
+  animation: spinReverse 15s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinReverse {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Hover Animations */
+.hover-lift {
+  transition: transform var(--transition-fast) var(--ease-out);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-scale {
+  transition: transform var(--transition-fast) var(--ease-out);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Loading Animations */
+.loading-dots {
+  animation: loadingDots 1.4s infinite ease-in-out;
+}
+
+@keyframes loadingDots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+} 
