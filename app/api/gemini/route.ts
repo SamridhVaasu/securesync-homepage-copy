@@ -33,11 +33,19 @@ export async function POST(req: NextRequest) {
       Author: ${vulnerability.author}
       
       Please provide:
-      1. A brief explanation of this type of vulnerability
-      2. Potential security risks
-      3. Recommended fix approach
-      4. Best practices to prevent similar issues
-      5. Estimated remediation effort (Low/Medium/High)
+      1. What's the Risk?
+        - What is the potential impact of this vulnerability?
+        - What are the possible attack vectors?
+      2. How to Fix?
+        - Ask Yourself Whether...
+        - Sensitive Code Examples with detailed Explanation.
+        - Are there any best practices to follow?
+      3. How to Prevent?
+        - What are the coding pracitces to prevent similar vulnerabilities?
+        - Are there any tools or libraries that can help?
+        - Compliant Solutions.
+      4. See(reference) Also
+        - Provide any references or links to external resources.
       
       Format the response in a structured way with clear sections.
     `;
