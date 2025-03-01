@@ -1,9 +1,11 @@
 "use client"
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import Navbar from '@/components/Navbar';
 import { 
   Shield, 
   Zap, 
@@ -34,7 +36,7 @@ import {
   Eye,
   Clock,
   Terminal,
-  Lock as LockIcon,
+  LockIcon,
   Key,
   PenTool,
   Search,
@@ -43,7 +45,8 @@ import {
   PieChart,
   UserCheck,
   MousePointer,
-  Settings
+  Settings,
+  ChevronDown
 } from 'lucide-react';
 
 export default function Home() {
@@ -51,18 +54,72 @@ export default function Home() {
   const [activePlan, setActivePlan] = useState('business');
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
   
+  // Scroll references for parallax effects
+  const heroRef = useRef<HTMLElement>(null);
+  const featuresRef = useRef<HTMLElement>(null);
+  const platformRef = useRef<HTMLElement>(null);
+  const testimonialsRef = useRef<HTMLElement>(null);
+  
+  const { scrollYProgress } = useScroll();
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
+  const heroY = useTransform(scrollYProgress, [0, 0.2], [0, 50]);
+  
+  // Intersection observer for viewport animations
+  const isHeroInView = useInView(heroRef, { once: false });
+  const isFeaturesInView = useInView(featuresRef, { once: true, amount: 0.2 });
+  const isPlatformInView = useInView(platformRef, { once: true, amount: 0.2 });
+  
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-background to-background/95 text-foreground">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-background via-background/95 to-background/90 text-foreground overflow-hidden">
+      <Navbar />
+      
       {/* Top Gradient Line */}
       <div className="h-1 w-full bg-gradient-to-r from-accent via-primary to-accent/50"></div>
       
       {/* Hero Section */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
+      <motion.section 
+        ref={heroRef}
+        className="relative py-28 md:py-36 overflow-hidden"
+        style={{ 
+          opacity: heroOpacity,
+          scale: heroScale,
+          y: heroY
+        }}
+      >
         {/* Background Elements */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-0 right-0 w-3/4 h-3/4 bg-gradient-to-bl from-accent/5 to-transparent rounded-bl-full opacity-60"></div>
-          <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/5 to-transparent rounded-tr-full opacity-40"></div>
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-5"></div>
+          <div className="absolute top-0 right-0 w-3/4 h-3/4 bg-gradient-to-bl from-accent/10 to-transparent rounded-bl-full opacity-80"></div>
+          <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/10 to-transparent rounded-tr-full opacity-60"></div>
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
+          
+          {/* Animated background shapes */}
+          <motion.div 
+            className="absolute top-1/4 right-1/3 w-64 h-64 rounded-full bg-accent/5"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.2, 0.3],
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity,
+              ease: "easeInOut" 
+            }}
+          />
+          
+          <motion.div 
+            className="absolute bottom-1/3 left-1/4 w-96 h-96 rounded-full bg-primary/5"
+            animate={{ 
+              scale: [1, 1.1, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1 
+            }}
+          />
         </div>
         
         {/* Glowing Orbs */}
@@ -72,9 +129,12 @@ export default function Home() {
         <div className="container relative z-10 mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ 
+                opacity: isHeroInView ? 1 : 0, 
+                y: isHeroInView ? 0 : 30 
+              }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
               className="lg:w-1/2"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent font-medium text-sm mb-6">
@@ -82,11 +142,14 @@ export default function Home() {
                 <span>AI-Powered Security Platform</span>
               </div>
               
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight tracking-tight">
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight tracking-tight">
                 Next-Generation <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary">
-                  DevSecOps Intelligence
-                </span>
+                <div className="inline-block relative">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent to-primary">
+                    DevSecOps Intelligence
+                  </span>
+                  <div className="absolute -bottom-2 left-0 h-1 w-full bg-gradient-to-r from-accent to-primary/60 rounded-full"></div>
+                </div>
               </h1>
               
               <p className="text-lg md:text-xl text-muted-foreground mb-8 leading-relaxed max-w-xl">
@@ -94,7 +157,7 @@ export default function Home() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-6 rounded-lg">
+                <Button size="lg" className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white px-8 py-6 rounded-lg shadow-lg shadow-accent/20">
                   Start Free Trial
                 </Button>
                 <Button size="lg" variant="outline" className="border-accent/20 hover:bg-accent/5 px-8 py-6 rounded-lg">
@@ -104,9 +167,9 @@ export default function Home() {
               </div>
               
               <div className="flex items-center gap-6 mt-10">
-                <div className="flex -space-x-2">
+                <div className="flex -space-x-3">
                   {[...Array(4)].map((_, i) => (
-                    <div key={i} className="w-10 h-10 rounded-full bg-accent/20 border-2 border-background flex items-center justify-center text-xs font-semibold">
+                    <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-br from-accent/20 to-primary/20 border-2 border-background flex items-center justify-center text-xs font-semibold shadow-sm">
                       {['MS', 'AB', 'TF', 'JK'][i]}
                     </div>
                   ))}
@@ -119,8 +182,11 @@ export default function Home() {
             
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              animate={{ 
+                opacity: isHeroInView ? 1 : 0, 
+                scale: isHeroInView ? 1 : 0.95 
+              }}
+              transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
               className="lg:w-1/2"
             >
               <div className="relative mx-auto max-w-lg">
@@ -222,24 +288,34 @@ export default function Home() {
                 </div>
                 
                 {/* Floating Elements */}
-                <div className="absolute -top-6 -right-6 bg-accent/10 backdrop-blur-md border border-accent/20 rounded-lg p-3 shadow-lg">
+                <motion.div 
+                  initial={{ opacity: 0, x: 20, y: -20 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="absolute -top-6 -right-6 bg-accent/10 backdrop-blur-md border border-accent/20 rounded-lg p-3 shadow-lg"
+                >
                   <div className="flex items-center gap-2">
                     <Brain className="w-4 h-4 text-accent" />
                     <span className="text-xs font-medium">AI Detection Active</span>
                   </div>
-                </div>
+                </motion.div>
                 
-                <div className="absolute -bottom-6 -left-6 bg-primary/10 backdrop-blur-md border border-primary/20 rounded-lg p-3 shadow-lg">
+                <motion.div 
+                  initial={{ opacity: 0, x: -20, y: 20 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  transition={{ delay: 0.8, duration: 0.5 }}
+                  className="absolute -bottom-6 -left-6 bg-primary/10 backdrop-blur-md border border-primary/20 rounded-lg p-3 shadow-lg"
+                >
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-primary" />
                     <span className="text-xs font-medium">Scan time: 3.2s</span>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
       
       {/* Trust Badges Section */}
       <section className="py-12 border-y border-border/10 bg-secondary/5">
@@ -258,13 +334,12 @@ export default function Home() {
       </section>
       
       {/* Key Features Section */}
-      <section className="py-24">
+      <section ref={featuresRef} className="py-24">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            animate={{ opacity: isFeaturesInView ? 1 : 0, y: isFeaturesInView ? 0 : 20 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary font-medium text-sm mb-6">
@@ -282,9 +357,8 @@ export default function Home() {
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                animate={{ opacity: isFeaturesInView ? 1 : 0, y: isFeaturesInView ? 0 : 20 }}
+                transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }}
                 className="relative group"
                 onMouseEnter={() => setHoveredFeature(index)}
                 onMouseLeave={() => setHoveredFeature(null)}
@@ -317,13 +391,12 @@ export default function Home() {
       </section>
       
       {/* Platform Visualization Tabs */}
-      <section className="py-24 bg-gradient-to-b from-secondary/10 to-background">
+      <section ref={platformRef} className="py-24 bg-gradient-to-b from-secondary/10 to-background">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            animate={{ opacity: isPlatformInView ? 1 : 0, y: isPlatformInView ? 0 : 20 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-center max-w-3xl mx-auto mb-16"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent font-medium text-sm mb-6">
@@ -884,7 +957,7 @@ export default function Home() {
       </section>
       
       {/* Testimonials Section */}
-      <section className="py-24 bg-gradient-to-b from-background to-secondary/10">
+      <section ref={testimonialsRef} className="py-24 bg-gradient-to-b from-background to-secondary/10">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
